@@ -1,3 +1,3 @@
 MergeSort focus on dividing an unsorted array of integers into two sets, and is repeated until the size of the sets are two or less. Afterwards, the set begins to merge together by comparing the smallest integers in each sets. TimSort is an additional feature that takes in a consideration that one set would more likely include a larger integer than the other. Hence, it would switch to insertion sort to find the next position before resuming the original merge sort algorithm.
 
-Each algorithum besides tim sort, has two main function. MergeSortA and MergeSortB. MergeSortA choose the size of the array to perform merge sort, and mergesortB perform the merge sort action.
+Each algorithum besides tim sort, has two main function (mergesort and MergesortA). mergesort choose the size of the array to perform merge sort, and mergesortA perform the merge sort action.
