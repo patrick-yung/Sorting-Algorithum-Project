@@ -1,0 +1,126 @@
+#Measure Time
+import time
+import math
+
+
+def mergesortA(A,start, middle, end):
+  #Posistion of left array from start to mid point
+  left=middle-start+1
+  #Posistion of right array from mid to  end point
+  right=end-middle;
+
+#Create a copy of left and right array
+  leftarray=[]
+  rightarray=[]
+  tmp=0
+  tmp1=0
+  while(tmp<left):
+    leftarray.append(A[tmp+start])
+    tmp+=1
+  while(tmp1<right):
+    rightarray.append(A[middle+tmp1+1])
+    tmp1+=1
+    
+
+  #Start to compare the first interger within each array, and store into the orginal array. Repeats untill one array is empty
+  index1=0
+  index2=0
+  index3=start
+  while index1<left and index2<right:
+    if(leftarray[index1]<rightarray[index2]):
+      A[index3]=leftarray[index1]
+      index3+=1
+      index1+=1
+    else:
+      A[index3]=rightarray[index2]
+      index2+=1
+      index3+=1
+#Copy the reminder of the empty array back into the orginal
+  while index1 < left:
+    A[index3]=leftarray[index1]
+    index1+=1
+    index3+=1
+
+  while index2 < right:
+    A[index3]=rightarray[index2]
+    index2+=1
+    index3+=1
+  return
+  
+def compAndSwap(a, i, j, dire):
+    if (dire==1 and a[i] > a[j]) or (dire==0 and a[i] < a[j]):
+        a[i],a[j] = a[j],a[i]
+
+
+def bitonicMerge(a, start, end, direction):
+    if end > 1:
+        k = end//2
+        for i in range(start , start+k):
+            compAndSwap(a, i, i+k, direction)
+        bitonicMerge(a, start, k, direction)
+        bitonicMerge(a, start+k, k, direction)
+ 
+
+
+
+def bitonicSort(a,start,end,direction):
+  if(end>1):
+    k=end//2
+    bitonicSort(a,start,k,1)
+    bitonicSort(a,start+k,k,0)
+    bitonicMerge(a,start,end,direction)
+
+
+
+
+def sort(a,start,n,up):
+  size=math.log(n-start,2)
+  check=math.log(n-start,2)
+  check=int (check)
+  
+
+  if(size==check):
+    tmp=[]
+    for x in range(0,n-start):
+      tmp.append(a[start+x])
+
+    bitonicSort(tmp,0,n-start,up)
+
+    for x in range (0, n-start):
+      a[start+x]=tmp[x]
+
+  else:
+    check=math.pow(2,check)
+    check=int(check)
+    tmp=[]
+    
+    for x in range(0,check):
+      tmp.append(a[start+x])
+
+    bitonicSort(tmp,0,check,up)
+
+    for x in range (0, check):
+      a[start+x]=tmp[x]
+    
+    
+    sort(a,check+start,n,up)
+    mergesortA(a,start,check+start-1,n-1)
+
+    return
+
+
+a=0
+for a in range(0,10):
+  for x in range(0,10):
+    arr=[
+        ]
+
+    start = time.time_ns()
+    n=len(arr)
+    sort(arr,0,n,1)
+    end = time.time_ns()-start
+    a+=end
+  a=a/10
+  print(a)
+  a=0
+
