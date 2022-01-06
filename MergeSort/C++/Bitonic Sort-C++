@@ -1,0 +1,160 @@
+#include <iostream>
+using namespace std;
+#include <math.h> 
+#include <chrono>
+#include <unistd.h>
+
+ 
+void printArray(int A[], int size)//To print the Sorted array//
+{
+    for (auto i = 0; i < size; i++)
+        cout << A[i] << " ";
+}
+
+void bitonicMerge(int a[], int start, int end, int direction)
+{
+    if (end>1)
+    {
+        int mid = end/2;//Check mid point//
+        for (int i=start; i<start+mid; i++){//Sort by user request 1 to accdening 0 for deccdening//
+            if (direction==(a[i]>a[i+mid])){
+              swap(a[i],a[i+mid]);}
+        }
+        //Repeat for smaller array//
+        bitonicMerge(a, start, mid, direction);
+        bitonicMerge(a, start+mid, mid, direction);
+    }
+}
+ 
+ 
+
+
+void mergesortA(int A[], int const start, int const mid, int const end)//The main mergesort algorithm to compare one array to another//
+{
+
+  int left=mid-start;//position of start of left array//
+  int right=end-mid+1;//position of start of right array//
+
+//Create a copy of left array and right array//
+ auto *leftArray = new int[left],
+      *rightArray = new int[right];
+
+  for(int tmp=0; tmp<left;tmp++){
+    leftArray[tmp]=A[tmp+start];
+  }
+  for(int tmp=0; tmp<right;tmp++){
+    rightArray[tmp]=A[tmp+mid];
+  }
+
+//Start to compare the first interger within each array, and store into the orginal array. Repeats untill one array is empty//
+  auto index1=0,index2=0;
+  int first=start;
+  while (index1 < left && index2 < right) {
+    if (leftArray[index1] < rightArray[index2]) {
+      A[first] = leftArray[index1];
+      index1++;
+    }else{
+      A[first] = rightArray[index2];
+      index2++;
+    }
+    first++;
+  }
+
+//Copy the reminder of the empty array back into the orginal//
+  while (index1 < left) {
+    A[first] = leftArray[index1];
+    index1++;
+    first++;
+  }
+  while (index2 < right) {
+    A[first] = rightArray[index2];
+    index2++;
+    first++;
+  }  
+}
+
+
+void bitonicSort(int a[],int low, int end, int dir)//Divide the array into smaller parts//
+{
+    if (end>1)
+    {
+        int k = end/2;
+        bitonicSort(a, low, k, 1);//Left side sort by accending order//
+        bitonicSort(a, low+k, k, 0);//Right side sort by deccending order//
+        bitonicMerge(a,low, end, dir);//Combine together//
+    }
+}
+ 
+
+void sort(int a[],int start, int N, int up)
+{
+  double size=log2(N-start);
+  int check=log2(N-start);
+
+  if(size==check){//Check if array is power of 2//
+    int tmp[N-start];//Create a copy of the require sorted array//
+    for(int n=0; n<N-start;n++){
+      tmp[n]=a[start+n];
+    }
+    bitonicSort(tmp,0, N-start, up);//Sort the clone//
+
+    for(int n=0; n<N-start;n++){
+      a[start+n]=tmp[n];
+    }//Copy clone back//
+
+  }else{//array is NOT a power of 2//
+    check=pow(2,check);
+
+    int tmp[check];
+    
+    for(int n=0;n<check;n++){
+      tmp[n]=a[start+n];
+    }//Create a copy of the require sorted array//
+
+    bitonicSort(tmp,0, check, up);//Sort the clone//
+
+    for(int n=0;n<check;n++){
+      a[n+start]=tmp[n];
+    }//Copy clone back//
+    
+    sort(a, check+start,N,up);//Repeat untill size of complete//
+
+    mergesortA(a,start, start+check, N);//Perform mergesort for the differnet array sizes/
+
+    }
+  
+
+}
+
+ 
+// Driver code
+int main()
+{
+  double average=0;
+  for(int a=0;a<10;a++){
+  for(int n=0;n<100;n++){
+
+      int a[100000]= {
+
+   };
+auto start = chrono::steady_clock::now();
+    int N = sizeof(a)/sizeof(a[0]);
+
+
+   //sort in ascending order//
+    sort(a,0,N,1);
+    
+    auto end = chrono::steady_clock::now();
+
+average+=chrono::duration_cast<chrono::microseconds>(end - start).count();
+if(average<100){
+  cout<<"\nFUCK\n";
+  return 0;
+}
+
+  }
+  cout <<"\n"<<average/(100)<< "\n \n";
+  average=0;
+}
+    return 0;
+}
