@@ -1,0 +1,95 @@
+#Measure Time
+import time
+
+#Tim Sort requirement
+KEY=10
+
+
+def insertionsort(A, start,end):
+  for x in range(start,end):
+      tmp=A[x]
+      b=x
+      while((b>0) and (A[b-1]>tmp)):
+        A[b]=A[b-1]
+        b-=1
+      A[b]=tmp
+
+
+#The main mergesort algorithm to compare one array to another
+def mergesortA(A,start, middle, end):
+  #Posistion of left and right array from mid to  end point
+  left=middle-start+1
+  right=end-middle;
+
+  #Create a copy of left and right array
+  leftarray=[]
+  rightarray=[]
+  tmp=0
+  tmp1=0
+  while(tmp<left):
+    leftarray.append(A[tmp+start])
+    tmp+=1
+
+  while(tmp1<right):
+    rightarray.append(A[middle+tmp1+1])
+    tmp1+=1
+    
+
+  #Perform comparison untill left or right array is empty
+  index1=0
+  index2=0
+  index3=start
+  key1=0
+  key2=0
+  while index1<left and index2<right:
+    if(leftarray[index1]<rightarray[index2]):
+      A[index3]=leftarray[index1]
+      index3+=1
+      index1+=1
+      key1+=1
+      key2=0
+      
+    else:
+      A[index3]=rightarray[index2]
+      index2+=1
+      index3+=1
+      key1=0
+      key2+=1
+
+
+  while index1 < left:
+    A[index3]=leftarray[index1]
+    index1+=1
+    index3+=1
+
+  while index2 < right:
+    A[index3]=rightarray[index2]
+    index2+=1
+    index3+=1
+  return
+  
+  
+def mergesort(A,start,end):
+  if start < end:
+    if(end-start<KEY):
+      insertionsort(A, start, end);
+    else:
+      middle = (start+(end-1))//2
+      mergesort(A, start, middle)
+      mergesort(A, middle+1, end)
+      mergesortA(A, start,middle, end)
+
+for p in range(0,10):
+  a=0
+  for x in range(0,1):
+
+    arr=[]
+      
+
+    start = time.time_ns()
+    n=len(arr)
+    mergesort(arr,0,n-1)
+    end = time.time_ns()-start
+    a+=end
+  print(a/10)
+  a=0
