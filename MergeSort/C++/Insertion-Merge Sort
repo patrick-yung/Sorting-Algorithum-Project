@@ -1,0 +1,130 @@
+#include <iostream>
+using namespace std;
+#include <chrono>
+#include <unistd.h>
+
+const int KEY=7;//Requirement for Insertion-Sort//
+
+void printArray(int A[], int size){//Print Array//
+  for (auto i = 0; i < size; i++){
+    cout << A[i] << " ";}
+}
+
+
+void insertion_sort(int A[], int start, int end)
+{
+    for (int a = start; a <= end; a++)
+    {
+        int tmp = A[a];
+        int b = a;
+        while ((b > 0) && (A[b - 1] > tmp))
+        {
+             A[b] = A[b - 1];
+             b--;
+        }
+        A[b] = tmp;
+    }
+}
+
+
+
+void mergesortA(int A[], int const start, int const mid, int const end)//The main mergesort algorithm to compare one array to another//
+{
+  int left=mid-start+1;//position of start of left array//
+  int right=end-mid;//position of start of right array//
+
+//Create a copy of left array and right array//
+ auto *leftArray = new int[left],
+      *rightArray = new int[right];
+
+  for(int tmp=0; tmp<left;tmp++){
+    leftArray[tmp]=A[tmp+start];
+  }
+  for(int tmp=0; tmp<right;tmp++){
+    rightArray[tmp]=A[tmp+1+mid];
+  }
+
+//Start to compare the first interger within each array, and store into the orginal array. Repeats untill one array is empty//
+  auto index1=0,index2=0;
+  int first=start;
+
+  while (index1 < left && index2 < right) {
+    if (leftArray[index1] <= rightArray[index2]) {
+      A[first] = leftArray[index1];
+      index1++;
+      first++;
+      }
+    else {
+      A[first] = rightArray[index2];
+      index2++;
+      first++;
+      }
+  }
+  //Copy the reminder of the empty array back into the orginal//
+  while (index1 < left) {
+    A[first] = leftArray[index1];
+    index1++;
+    first++;}
+
+  while (index2 < right) {
+    A[first] = rightArray[index2];
+    index2++;
+    first++;
+  }  
+}
+
+
+void mergeSort(int array[], int const begin, int const end)
+{
+
+  
+    if (begin >= end)
+        return;
+    
+    if((end-begin)<=KEY){
+      insertion_sort(array, begin, end);
+    }else{
+    auto mid = begin + (end - begin) / 2;
+    mergeSort(array, begin, mid);
+    mergeSort(array, mid + 1, end);
+    mergesortA(array, begin, mid, end);
+    }
+
+
+    
+}
+
+
+int main() {
+
+int average=0;
+for(int a=0;a<1;a++){
+  for(int n=0;n<1;n++){
+
+int A[100000] = {
+
+};
+  auto start = chrono::steady_clock::now();
+  auto arr_size = sizeof(A) / sizeof(A[0]); 
+
+  mergeSort(A,0,arr_size-1);
+
+  auto end = chrono::steady_clock::now();
+
+  average+=chrono::duration_cast<chrono::microseconds>(end - start).count();
+
+
+  }
+  if(average<0){
+    cout<<"\nFUCK ME \n";
+
+  }
+  cout<<endl<<(average/1)<<" \n";
+average=0;
+}
+
+
+
+
+
+}
