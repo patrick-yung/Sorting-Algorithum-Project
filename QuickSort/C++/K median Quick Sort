@@ -1,0 +1,138 @@
+#include <iostream>
+#include <cstdlib>//For randon number generating//
+#include <chrono> //To measure Time//
+#include <unistd.h> //To measure Time//
+
+using namespace std;
+
+void swap(int* a, int* b) 
+{ 
+    int tmp = *a; 
+    *a = *b; 
+    *b = tmp; 
+} 
+
+
+int quickSortB(int arr[], int start, int end){
+    int pivot = arr[end];
+    int i = (start - 1);
+    //Loop around the array//
+    for (int j = start; j <= end - 1; j++)
+    {
+        if (arr[j] <= pivot) {
+          //Perform shift of any  smaller to the leftside of pivot//
+            i++;
+            swap(arr[i], arr[j]);
+        }}
+
+    swap(arr[i + 1], arr[end]);
+    return (i + 1);
+}
+//Perform quick sort on pivot array//
+ int quickSortD(int arr[], int low, int high){
+  
+    srand(time(NULL));
+    int random = low + rand() % (high - low);
+
+    swap(arr[random], arr[high]);
+ 
+    return quickSortB(arr, low, high);
+}
+//Perform quick sort on pivot array//
+void quickSortC(int A[], int start, int end){
+
+  if (end>start){
+    //Perform quickSort on mid, so mid in right position//
+    int mid=quickSortD( A, start, end);
+    //Repeat on left and right array//
+    quickSortC(A, start, mid-1);
+    quickSortC(A, mid+1, end);
+  }
+}
+
+
+int quickSortA(int arr[], int low, int high)
+{
+    int random=0;
+    //Generate pivot random array based on array size, for each 5000, generate one random pivot point and find median//
+    srand(time(NULL));
+    if(high-low<=5000){
+      //array size is less than 5000//
+      random = low + rand() % (high - low);
+
+    }else{
+      int median[20]={};
+      int size=0;
+      for(int n=0;n*5000<high-low;n++){
+        median[n]=low + rand() % (high - low);
+
+              size++;
+
+      }
+      quickSortC(median, 0, size-1);
+      random=median[int(size/2)];
+
+    }
+
+    swap(arr[random], arr[high]);
+ 
+    return quickSortB(arr, low, high);
+}
+
+void quickSort(int A[], int start, int end){
+
+  if (end>start){
+    //Perform quickSort on mid, so mid in right position//
+    int mid=quickSortA( A, start, end);
+    //Repeat on left and right array//
+    quickSort(A, start, mid-1);
+    quickSort(A, mid+1, end);
+  }
+}
+
+
+
+//Print Array out//
+void printArray(int A[], int size)
+{
+    int i;
+    for (i = 0; i < size; i++){
+        printf("%d ", A[i]);}
+    printf("\n");
+}
+ 
+
+
+int main() {
+  int average;
+  //Array input//
+  for(int m=0;m<1;m++){
+  for(int q=0;q<10;q++){
+  average=0;
+    int arr[100000] = { 
+
+    };
+  //Start to measure time taken//
+  auto start = chrono::steady_clock::now();
+
+
+  //Perform quickSort//
+  int n = sizeof(arr) / sizeof(arr[0]);
+  quickSort(arr, 0, n - 1);
+
+
+  //Stop measure time taken + print out the result in nanoseconds//
+  auto end = chrono::steady_clock::now();
+
+  average+=chrono::duration_cast<chrono::microseconds>(end - start).count();
+
+
+  }
+    
+  }
+ 
+
+    /*Print array out
+  printf("Sorted array: \n");
+  printArray(arr, n);*/
+}
