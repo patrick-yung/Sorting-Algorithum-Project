@@ -1,0 +1,59 @@
+import time #Measure Time
+import random # Random generator
+
+
+#Moving all integers smaller than the pivot on the left, and larger on the right
+def quicksortB(arr,first,last):
+  pivot = first # pivot
+  i = first + 1
+  for j in range(first + 1, last + 1):
+    if arr[j] <= arr[pivot]:
+    #Elements smaller
+      arr[i] , arr[j] = arr[j] , arr[i]
+      i = i + 1
+  #Element larger
+  arr[pivot] , arr[i - 1] =arr[i - 1] , arr[pivot]
+  return (i-1)
+
+def quicksortA(arr , first, last):
+    #generate pivot point
+    pivot=random.randrange(first, last)
+    random1=random.randrange(first, last)
+    random2=random.randrange(first, last)
+    if(random1<pivot and random1>random2 or random1>pivot and random1<random2):
+      pivot=random1
+    elif(random2<pivot and random2>random1 or random2>pivot and random2<random1):
+      pivot=random2
+
+    #perform swap
+    arr[first], arr[pivot] =arr[pivot], arr[first]
+    return quicksortB(arr, first, last)
+            
+def quicksort(arr, first , last):
+  if(first < last):
+      mid = quicksortA(arr, first, last)
+      #Repeat on left and right array
+
+      quicksort(arr , first , mid-1)
+      quicksort(arr, mid + 1, last)
+ 
+#Array input
+average=0;
+for a in range(0,10):
+  for x in range(0,10):
+    arr=[
+    ]
+    #Start to measure time take
+    start = time.time_ns()
+    quicksort(arr, 0, len(arr)-1)
+
+    #Stop measure time taken + print out the result in nanoseconds
+    end = time.time_ns()-start
+    average=average+end
+
+  average=average/10;
+  print(average)
+  average=0
+
+      #printing out the sorted array to confirme the algorithm worked
+    
