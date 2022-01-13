@@ -1,0 +1,118 @@
+#include <iostream>
+#include <chrono> //To measure Time//
+#include <unistd.h> //To measure Time//
+
+using namespace std;
+
+
+void swap(int* a, int* b) 
+{ 
+    int t = *a; 
+    *a = *b; 
+    *b = t; 
+} 
+
+int quickSortB(int arr[], int low, int high)
+{
+
+    int pivot = arr[high];
+   
+    // Index of smaller element
+    int i = (low - 1);
+ 
+    for (int j = low; j <= high - 1; j++)
+    {
+        // If current element is smaller
+        // than or equal to pivot
+        if (arr[j] <= pivot) {
+            i++;
+            swap(arr[i], arr[j]);
+
+        }
+
+    }
+    swap(arr[i + 1], arr[high]);
+    return (i + 1);
+}
+ 
+
+int quickSortA(int arr[], int low, int high)
+{
+    // Generate three random number and find median element//
+    srand(time(NULL));
+    int random = low + rand() % (high - low);
+    int random2 = low + rand() % (high - low);
+    int random3 = low + rand() % (high - low);
+    if(random<random2&&random>random3){
+      }else if(random<random2){
+        random=random3;
+      }else{
+        random=random2;
+      }
+  
+    
+ 
+    // Swap A[random] with A[high]
+    swap(arr[random], arr[high]);
+ 
+    return quickSortB(arr, low, high);
+}
+
+void quickSort(int A[], int start, int end){
+
+  if (end>start){
+    //Perform quickSort on mid, so mid in right position//
+    int mid=quickSortA( A, start, end);
+    //Repeat on left and right array//
+    quickSort(A, start, mid-1);
+    quickSort(A, mid+1, end);
+  }
+}
+
+
+
+//Print Array out//
+void printArray(int A[], int size)
+{
+    int i;
+    for (i = 0; i < size; i++){
+        printf("%d ", A[i]);}
+    printf("\n");
+}
+ 
+
+
+int main() {
+  int average;
+
+  //Array input//
+  for(int m=0;m<10;m++){
+  for(int q=0;q<10;q++){
+  average=0;
+    int arr[100000] = { 
+
+    };
+  //Start to measure time taken//
+  auto start = chrono::steady_clock::now();
+
+
+  //Perform quickSort//
+  int n = sizeof(arr) / sizeof(arr[0]);
+  quickSort(arr, 0, n - 1);
+
+
+  //Stop measure time taken + print out the result in nanoseconds//
+  auto end = chrono::steady_clock::now();
+
+  average+=chrono::duration_cast<chrono::microseconds>(end - start).count();
+
+
+  }
+    
+  }
+
+
+    /*Print array out
+  printf("Sorted array: \n");
+  printArray(arr, n);*/
+}
